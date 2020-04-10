@@ -1,16 +1,11 @@
-# giffinder
+# GIF Finder
 
-A GIF finder project.
+Um projeto com o intuito de fazer a procura de gifs e depois compartilhar.
 
-## Getting Started
+## Informações
 
-This project is a starting point for a Flutter application.
+Esse projeto foi criado com o Flutter.
 
-A few resources to get you started if this is your first Flutter project:
+Redes sociais:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Instagram: @luizfelipeah](https://www.instagram.com/luizfelipeah)

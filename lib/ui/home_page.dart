@@ -51,18 +51,28 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: <Widget>[
           Container(
-            margin: const EdgeInsets.only(right: 22, left: 25, top: 20),
-            height: 30,
+            margin: const EdgeInsets.only(right: 15, left: 15, top: 20),
+            height: 35,
             child: TextField(
-            decoration: new InputDecoration(
-              prefixIcon: new Icon(Icons.search, size: 25, color: Colors.grey[790],),
+                decoration: new InputDecoration(
+              prefixIcon: new Icon(
+                Icons.search,
+                size: 25,
+                color: Colors.grey[790],
+              ),
               fillColor: Colors.grey[300],
               filled: true,
               contentPadding: const EdgeInsets.all(5),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white, width: 2.0),
-                borderRadius: BorderRadius.circular(25.0),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white, width: 0.0),
               ),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                bottomLeft: Radius.circular(10.0),
+                topRight: Radius.circular(10.0),
+                bottomRight: Radius.circular(10.0),
+              )),
               hintText: 'Search in giphy',
             )),
           )
