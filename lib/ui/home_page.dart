@@ -43,41 +43,86 @@ class _HomePageState extends State<HomePage> {
                 textStyle: TextStyle(
                     color: Colors.black,
                     fontSize: 32,
-                    fontWeight: FontWeight.bold))),
+                    fontWeight: FontWeight.bold)),
+                    ),
         elevation: 0.0,
+
         bottomOpacity: 0.0,
       ),
       backgroundColor: Colors.white,
       body: Column(
         children: <Widget>[
           Container(
-            margin: const EdgeInsets.only(right: 15, left: 15, top: 20),
-            height: 35,
-            child: TextField(
-                decoration: new InputDecoration(
-              prefixIcon: new Icon(
-                Icons.search,
-                size: 25,
-                color: Colors.grey[790],
-              ),
-              fillColor: Colors.grey[300],
-              filled: true,
-              contentPadding: const EdgeInsets.all(5),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white, width: 0.0),
-              ),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                bottomLeft: Radius.circular(10.0),
-                topRight: Radius.circular(10.0),
-                bottomRight: Radius.circular(10.0),
-              )),
-              hintText: 'Search in giphy',
-            )),
+              margin: const EdgeInsets.only(right: 15, left: 15, top: 20, bottom: 20),
+              height: 35,
+              child: TextField(
+                  decoration: new InputDecoration(
+                prefixIcon: new Icon(
+                  Icons.search,
+                  size: 25,
+                  color: Colors.grey[790],
+                ),
+                fillColor: Colors.grey[300],
+                filled: true,
+                contentPadding: const EdgeInsets.all(5),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white, width: 0.0),
+                ),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  bottomLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0),
+                  bottomRight: Radius.circular(10.0),
+                )),
+                hintText: 'Procurar no giphy',
+              ))),
+          Expanded(
+            child: FutureBuilder(
+                future: _getGifs(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                      return Container(
+                        width: 200.0,
+                        height: 200.0,
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.black),
+                          strokeWidth: 5.0,
+                        ),
+                      );
+                    default:
+                      if (snapshot.hasError)
+                        return Container(
+                          child: Text("Erro ao carregar os dados, verifique sua conexão.",
+                          textAlign: TextAlign.center,
+                              style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold))),
+                        );
+                      else
+                        return _createGifTable(context, snapshot);
+                  }
+                }),
           )
         ],
       ),
     );
+  }
+
+  Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
+    return GridView.builder(
+      padding: EdgeInsets.all(10.0),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 15.0, mainAxisSpacing: 15.0),
+      itemCount: snapshot.data["data"].length,
+      itemBuilder: (context, index){
+        return GestureDetector(
+          child: Image.network(snapshot.data["data"][index]["images"]["fixed_height"]["url"], height: 300.0, fit: BoxFit.cover,)
+        );
+      });
   }
 }
