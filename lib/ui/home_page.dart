@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share/share.dart';
+import 'package:transparent_image/transparent_image.dart'
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,15 +24,14 @@ class _HomePageState extends State<HomePage> {
           "https://api.giphy.com/v1/gifs/trending?api_key=kWgZphvvX2CwAXqgnJTluwbIkWuZcKgS&limit=24&rating=G");
     else
       response = await http.get(
-          "https://api.giphy.com/v1/gifs/search?api_key=kWgZphvvX2CwAXqgnJTluwbIkWuZcKgS&q=dog$_search&limit=19&offset=$_offset&rating=G&lang=en");
+          "https://api.giphy.com/v1/gifs/search?api_key=kWgZphvvX2CwAXqgnJTluwbIkWuZcKgS&q=$_search&limit=19&offset=$_offset&rating=G&lang=en");
     return json.decode(response.body);
   }
 
   @override
   void initState() {
     super.initState();
-    _getGifs().then((map) {
-    });
+    _getGifs().then((map) {});
   }
 
   @override
@@ -127,35 +129,39 @@ class _HomePageState extends State<HomePage> {
     if (_search == null) {
       return data.length;
     } else {
-     return data.length + 1;
+      return data.length + 1;
     }
   }
 
   Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
     return GridView.builder(
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(15.0),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, crossAxisSpacing: 15.0, mainAxisSpacing: 15.0),
         itemCount: _getCount(snapshot.data["data"]),
         itemBuilder: (context, index) {
-          if(_search == null || index < snapshot.data["data"].length)
-          return GestureDetector(
-              child: Image.network(
-            snapshot.data["data"][index]["images"]["fixed_height"]["url"],
-            height: 300.0,
-            fit: BoxFit.cover,)
+          if (_search == null || index < snapshot.data["data"].length)
+            return GestureDetector(
+              child: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: snapshot.data["data"][index]["images"]["fixed_height"]["url"],
+                height: 300.0,
+                fit: BoxFit.cover,
+              ),
+              onTap: (){
+                Share.share(snapshot.data["data"][index]["images"]["fixed_height"]["url"]);
+              },
             );
-            else 
+          else
             return Container(
               child: GestureDetector(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Icon(Icons.add, color: Colors.black, size: 70.0),
-                    Text("Carregar mais...", style: TextStyle(color: Colors.black, fontSize: 22.0)),
+                    Text("Carregar mais...",
+                        style: TextStyle(color: Colors.black, fontSize: 22.0)),
                   ],
                 ),
-                onTap: (){
+                onTap: () {
                   setState(() {
                     _offset += 19;
                   });
